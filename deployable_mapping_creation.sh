@@ -42,8 +42,8 @@ EOT
 )
 
 echo -e "Create the deployable mapping payload"
-printf "$deploymapping_template" "6e3bc311-c83d-4cd1-a457-99d9a5f20f19" "$TARGET_REGION_ID" "${PIPELINE_TOOLCHAIN_ID}" "${PIPELINE_SERVICE_ID}" \
-  "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
+printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" "${PIPELINE_TOOLCHAIN_ID}" "${PIPELINE_SERVICE_ID}" \
+  "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${SOURCE_GIT_REVISION_TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
   "${PIPELINE_CLUSTER_NAME}" "${CLUSTER_NAMESPACE}" > deployable_mapping.json
 
 echo -e "POST ${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings"

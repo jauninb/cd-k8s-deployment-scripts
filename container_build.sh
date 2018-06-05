@@ -74,6 +74,8 @@ echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
 echo "SOURCE_GIT_URL=${GIT_URL}" >> $ARCHIVE_DIR/build.properties
 echo "SOURCE_GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
 echo "SOURCE_GIT_REVISION_URL=${GIT_URL%.git}/commit/${GIT_COMMIT}" >> $ARCHIVE_DIR/build.properties
+SOURCE_GIT_REVISION_TIMESTAMP=$(date +%s)
+echo "SOURCE_GIT_REVISION_TIMESTAMP=${SOURCE_GIT_REVISION_TIMESTAMP}" >> $ARCHIVE_DIR/build.properties
 echo "GIT_REPO_SERVICE_ID=${GIT_REPO_SERVICE_ID}" >> $ARCHIVE_DIR/build.properties
 echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
 cat $ARCHIVE_DIR/build.properties      
