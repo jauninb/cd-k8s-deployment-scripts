@@ -46,7 +46,7 @@ printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" \
   "${PIPELINE_TOOLCHAIN_ID}" "$TARGET_REGION_ID" \
   "${PIPELINE_ID}" \
   "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${SOURCE_GIT_REVISION_TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
-  "${PIPELINE_CLUSTER_NAME}" "${CLUSTER_NAMESPACE}" > deployable_mapping.json
+  "${PIPELINE_KUBERNETES_CLUSTER_NAME}" "${CLUSTER_NAMESPACE}" > deployable_mapping.json
 
 echo -e "Identify the HTTP verb to use"
 EXISTING_DEPLOYABLE_MAPPINGS=$(curl -H "Authorization: ${TOOLCHAIN_TOKEN}" "${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings?toolchain_guid=${PIPELINE_TOOLCHAIN_ID}")
