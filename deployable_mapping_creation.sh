@@ -52,7 +52,7 @@ cat deployable_mapping.json
 curl -X POST \
   "${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings" \
   -is \
-  -H "Authorization: Authorization: ${TOOLCHAIN_TOKEN}" \
+  -H "Authorization: ${TOOLCHAIN_TOKEN}" \
   -H "cache-control: no-cache" \
   -H "content-type: application/json; charset=utf-8" \
   -d @deployable_mapping.json
