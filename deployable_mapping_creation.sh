@@ -54,11 +54,18 @@ MAPPING_GUID=$(echo $EXISTING_DEPLOYABLE_MAPPINGS | jq --arg DEPLOYABLE_GUID "$T
 
 echo "MAPPING_GUID=$MAPPING_GUID"
 
-echo -e "POST ${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings"
+if [ -z "$MAPPING_GUID" ]; then
+   HTTP_VERB="POST"
+else 
+   HTTP_VERB="PUT"
+   COMPLEMENTARY_PATH="/${MAPPING_GUID}"
+fi
+
+echo -e "$HTTP_VERB ${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings${COMPLEMENTARY_PATH}"
 cat deployable_mapping.json
 
-curl -X POST \
-  "${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings" \
+curl -X $HTTP_VERB \
+  "${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings${COMPLEMENTARY_PATH}" \
   -is \
   -H "Authorization: ${TOOLCHAIN_TOKEN}" \
   -H "cache-control: no-cache" \
