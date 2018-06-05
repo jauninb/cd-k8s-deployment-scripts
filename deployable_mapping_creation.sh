@@ -44,7 +44,7 @@ EOT
 echo -e "Create the deployable mapping payload"
 printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" \
   "${PIPELINE_TOOLCHAIN_ID}" "$TARGET_REGION_ID" \
-  "${PIPELINE_SERVICE_ID}" \
+  "${PIPELINE_ID}" \
   "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${SOURCE_GIT_REVISION_TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
   "${PIPELINE_CLUSTER_NAME}" "${CLUSTER_NAMESPACE}" > deployable_mapping.json
 
