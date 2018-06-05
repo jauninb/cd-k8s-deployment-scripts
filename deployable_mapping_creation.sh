@@ -48,6 +48,12 @@ printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" \
   "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${SOURCE_GIT_REVISION_TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
   "${PIPELINE_CLUSTER_NAME}" "${CLUSTER_NAMESPACE}" > deployable_mapping.json
 
+echo -e "Identify the HTTP verb to use"
+EXISTING_DEPLOYABLE_MAPPINGS=$(curl -H "Authorization: ${TOOLCHAIN_TOKEN}" "${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings?toolchain_guid=${PIPELINE_TOOLCHAIN_ID}")
+MAPPING_GUID=$(echo $EXISTING_DEPLOYABLE_MAPPINGS | jq --arg DEPLOYABLE_GUID "$TARGET_DEPLOYABLE_GUID" -r '.items[] | select(.deployable.deployable_guid==$DEPLOYABLE_GUID) | .mapping_guid');
+
+echo "MAPPING_GUID=$MAPPING_GUID"
+
 echo -e "POST ${PIPELINE_API_URL%/pipeline}/toolchain_deployable_mappings"
 cat deployable_mapping.json
 
