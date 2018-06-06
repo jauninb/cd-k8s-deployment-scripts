@@ -59,10 +59,6 @@ bx cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_
 # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
 ######################################################################################
 
-echo -e "Retrieve the service instances for the toolchain"
-TOOLCHAIN_SERVICES=$(curl -H "Authorization: ${TOOLCHAIN_TOKEN}" "${PIPELINE_API_URL%/pipeline}/toolchains/${PIPELINE_TOOLCHAIN_ID}/services")
-GIT_REPO_SERVICE_ID=$(echo $TOOLCHAIN_SERVICES | jq --arg GIT_URL "${GIT_URL}" -r '.services[] | select(.parameters.repo_url==$GIT_URL) | .instance_id')
-
 echo -e "Checking archive dir presence"
 mkdir -p $ARCHIVE_DIR
 
@@ -71,12 +67,19 @@ echo "IMAGE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
 echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
 echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
 echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
+
+# pass git source information along via build.properties for Traceability additional deployment script
+echo -e "Retrieving the service instance providing the git input from the toolchain"
+TOOLCHAIN_SERVICES=$(curl -H "Authorization: ${TOOLCHAIN_TOKEN}" "${PIPELINE_API_URL%/pipeline}/toolchains/${PIPELINE_TOOLCHAIN_ID}/services")
+GIT_REPO_SERVICE_ID=$(echo $TOOLCHAIN_SERVICES | jq --arg GIT_URL "${GIT_URL}" -r '.services[] | select(.parameters.repo_url==$GIT_URL) | .instance_id')
+
 echo "SOURCE_GIT_URL=${GIT_URL}" >> $ARCHIVE_DIR/build.properties
 echo "SOURCE_GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
 echo "SOURCE_GIT_REVISION_URL=${GIT_URL%.git}/commit/${GIT_COMMIT}" >> $ARCHIVE_DIR/build.properties
 SOURCE_GIT_REVISION_TIMESTAMP=$(date +%s)
 echo "SOURCE_GIT_REVISION_TIMESTAMP=${SOURCE_GIT_REVISION_TIMESTAMP}" >> $ARCHIVE_DIR/build.properties
 echo "GIT_REPO_SERVICE_ID=${GIT_REPO_SERVICE_ID}" >> $ARCHIVE_DIR/build.properties
+
 echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
 cat $ARCHIVE_DIR/build.properties      
 
