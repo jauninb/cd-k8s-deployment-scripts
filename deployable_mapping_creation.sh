@@ -6,14 +6,14 @@ while read -r line ; do
     eval "export $line"
 done < <(grep GIT build.properties)
 
+# If creating a deployable mapping of type non app, ui is failing/showing internal error
 deploymapping_template=$(cat <<'EOT'
 {
     "deployable": {
         "deployable_guid": "%s",
         "type": "app",
         "region_id": "%s",
-        "organization_guid": "8d34d127-d3db-43cd-808b-134b388f1646",
-        "space_guid": "5f9f2e5f-610c-4013-b34c-84c6bf4ccf30"
+        "organization_guid": "%s"
     },
     "toolchain": {
         "toolchain_guid": "%s",
@@ -42,7 +42,7 @@ EOT
 )
 
 echo -e "Create the deployable mapping payload"
-printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" \
+printf "$deploymapping_template" "$TARGET_DEPLOYABLE_GUID" "$TARGET_REGION_ID" "$PIPELINE_ORGANIZATION_ID" \
   "${PIPELINE_TOOLCHAIN_ID}" "$TARGET_REGION_ID" \
   "${PIPELINE_ID}" \
   "${GIT_REPO_SERVICE_ID}" "${SOURCE_GIT_URL}" "${SOURCE_GIT_BRANCH}" "${SOURCE_GIT_REVISION_TIMESTAMP}" "$SOURCE_GIT_REVISION_URL" \
